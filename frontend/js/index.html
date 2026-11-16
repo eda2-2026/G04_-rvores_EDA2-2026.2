@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reserva de Salas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo__texto">
+    <h1>Reserva de Salas</h1>
+    <p>Veja o que está livre, clique no horário e reserve. Se houver conflito, o sistema avisa na hora.</p>
+  </div>
+
+  <div class="seletor-dia" role="group" aria-label="Escolher o dia">
+    <button type="button" id="dia-anterior" class="botao-icone" aria-label="Dia anterior">←</button>
+    <input type="date" id="dia" aria-label="Dia">
+    <button type="button" id="dia-seguinte" class="botao-icone" aria-label="Próximo dia">→</button>
+    <button type="button" id="dia-hoje" class="botao-texto">Hoje</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ===================== MAPA DO DIA ===================== -->
+  <section class="mapa-secao" aria-labelledby="titulo-mapa">
+    <h2 id="titulo-mapa" class="titulo-dia">Carregando…</h2>
+
+    <div class="mapa-rolagem">
+      <div class="mapa" id="mapa"></div>
+    </div>
+
+    <p class="legenda">
+      <span class="legenda__item legenda__item--livre">livre</span>
+      <span class="legenda__item legenda__item--ocupado">reservado</span>
+      Clique num espaço livre para começar uma reserva ali, ou numa reserva para ver detalhes.
+    </p>
+    <p id="msg-mapa" class="mensagem" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- ===================== FORMULÁRIOS ===================== -->
+  <aside class="lateral">
+
+    <form id="form-reserva" class="formulario" novalidate>
+      <h2>Nova reserva</h2>
+      <p class="formulario__dia" id="form-dia"></p>
+
+      <label for="f-sala">Sala</label>
+      <select id="f-sala"></select>
+
+      <label for="f-titulo">Título</label>
+      <input type="text" id="f-titulo" maxlength="80" placeholder="ex.: Reunião de grupo" autocomplete="off">
+
+      <label for="f-responsavel">Responsável</label>
+      <input type="text" id="f-responsavel" maxlength="60" placeholder="seu nome" autocomplete="name">
+
+      <div class="par">
+        <div>
+          <label for="f-inicio">Início</label>
+          <input type="time" id="f-inicio" min="07:00" max="22:00" step="900">
+        </div>
+        <div>
+          <label for="f-fim">Fim</label>
+          <input type="time" id="f-fim" min="07:00" max="22:00" step="900">
+        </div>
+      </div>
+
+      <button type="submit" class="botao-principal">Reservar</button>
+      <p id="msg-reserva" class="mensagem" role="status" aria-live="polite"></p>
+    </form>
+
+    <form id="form-livre" class="formulario formulario--secundario" novalidate>
+      <h2>Achar uma sala livre</h2>
+      <p class="formulario__dia">Para o dia selecionado.</p>
+
+      <div class="par">
+        <div>
+          <label for="l-inicio">Início</label>
+          <input type="time" id="l-inicio" value="14:00" min="07:00" max="22:00" step="900">
+        </div>
+        <div>
+          <label for="l-fim">Fim</label>
+          <input type="time" id="l-fim" value="16:00" min="07:00" max="22:00" step="900">
+        </div>
+      </div>
+
+      <div class="par">
+        <div>
+          <label for="l-capacidade">Pessoas</label>
+          <input type="number" id="l-capacidade" min="0" placeholder="qualquer">
+        </div>
+        <div>
+          <label for="l-tipo">Tipo</label>
+          <select id="l-tipo">
+            <option value="">qualquer</option>
+            <option value="sala">sala</option>
+            <option value="laboratorio">laboratório</option>
+            <option value="auditorio">auditório</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="botao-secundario">Procurar</button>
+      <p id="msg-livre" class="mensagem" role="status" aria-live="polite"></p>
+      <ul id="resultado-livre" class="resultado-livre"></ul>
+    </form>
+
+  </aside>
+
+  <!-- ===================== POR DENTRO DA ÁRVORE ===================== -->
+  <section class="arvore-secao">
+    <details id="arvore-detalhes">
+      <summary>Por dentro: a árvore rubro-negra de cada sala</summary>
+
+      <div class="arvore-corpo">
+        <p class="arvore-explicacao">
+          Cada sala guarda suas reservas numa árvore rubro-negra, ordenada pelo horário de início.
+          Para saber se um horário está livre, o sistema olha só o vizinho anterior e o seguinte
+          nessa árvore, em vez de percorrer todas as reservas. Cada círculo é uma reserva. O texto
+          mostra só a hora de início, mas a ordem da árvore considera também o dia; passe o mouse
+          sobre um círculo para ver a data completa.
+        </p>
+
+        <div class="arvore-controle">
+          <label for="a-sala">Sala</label>
+          <select id="a-sala"></select>
+        </div>
+
+        <p id="arvore-numeros" class="arvore-numeros"></p>
+        <div id="arvore-desenho" class="arvore-desenho"></div>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<dialog id="detalhe" aria-labelledby="d-titulo">
+  <h2 id="d-titulo"></h2>
+  <p id="d-info"></p>
+  <div class="dialogo__acoes">
+    <button type="button" id="d-fechar" class="botao-texto">Fechar</button>
+    <button type="button" id="d-cancelar" class="botao-perigo">Cancelar esta reserva</button>
+  </div>
+</dialog>
+
+<footer class="rodape">
+  Projeto acadêmico de Estruturas de Dados 2 · árvore rubro-negra aplicada à detecção de conflitos de horário
+</footer>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
