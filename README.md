@@ -238,7 +238,7 @@ O experimento gera os resultados no arquivo indicado.
 ## Estrutura do Projeto
 
 ```text
-trabalh03-eda2/
+G04_-rvores_EDA2-2026.2
 ├── README.md
 ├── requirements.txt
 ├── src/
