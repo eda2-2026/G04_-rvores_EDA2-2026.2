@@ -154,13 +154,13 @@ O projeto utiliza um servidor local desenvolvido em Python com Flask e uma inter
 Clone o repositório:
 
 ```bash
-git clone https://github.com/eduardar01/trabalh03-eda2.git
+git clone https://github.com/eda2-2026/G04_-rvores_EDA2-2026.2.git
 ```
 
 Entre na pasta:
 
 ```bash
-cd trabalh03-eda2
+cd G04_-rvores_EDA2-2026.2
 ```
 
 Crie um ambiente virtual:
