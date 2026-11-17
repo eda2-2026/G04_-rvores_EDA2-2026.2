@@ -1,18 +1,3 @@
-"""
-Experimento: verificar conflito de horário com a árvore rubro-negra
-x varrendo a lista inteira de reservas.
-
-Cenário: uma sala com n reservas de 30 minutos, uma por hora, em
-sequência (o pior caso para uma árvore sem balanceamento, pois as
-chaves entram em ordem crescente). Consultas aleatórias de 15 minutos,
-em passos de 5 minutos: uma parte cai em conflito, outra cabe.
-
-Uso:
-    python scripts/benchmark.py
-    python scripts/benchmark.py --tamanhos 1000 10000 100000 --consultas 300
-    python scripts/benchmark.py --saida docs/resultados_benchmark.md
-"""
-
 import argparse
 import os
 import random

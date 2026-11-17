@@ -1,41 +1,3 @@
-"""
-Árvore Rubro-Negra (Red-Black Tree)
-====================================
-
-Árvore binária de busca auto-balanceada. Cada nó tem uma cor (vermelho
-ou preto) e a árvore mantém, após cada inserção e remoção, as
-seguintes propriedades:
-
-    1. Todo nó é vermelho ou preto.
-    2. A raiz é preta.
-    3. Todo nó NIL (folha vazia) é preto.
-    4. Um nó vermelho nunca tem filho vermelho.
-    5. Todo caminho de um nó até suas folhas NIL passa pela mesma
-       quantidade de nós pretos (altura negra).
-
-Dessas propriedades decorre que a altura da árvore é, no máximo,
-2 * log2(n + 1) (medida em arestas), garantindo busca, inserção e
-remoção em O(log n) no pior caso.
-
-Implementação baseada no pseudocódigo do livro CLRS (Cormen et al.,
-"Introduction to Algorithms", capítulo 13), adaptada para Python.
-Usa um nó sentinela único (NIL) para representar todas as folhas
-vazias, como no livro.
-
-Extensões para uso em aplicações (além do CLRS):
-    - cada nó guarda, junto da chave, um `valor` associado;
-    - consultas de vizinhança (piso, predecessor, sucessor) e consulta
-      por faixa, todas em O(log n) (+ k para os k itens da faixa);
-    - contador `visitas` de nós percorridos, para medir o custo real
-      das consultas.
-
-Complexidades (pior caso):
-    buscar / piso / predecessor / sucessor   O(log n)
-    faixa                                    O(log n + k)
-    inserir                                  O(log n), no máx. 2 rotações
-    remover                                  O(log n), no máx. 3 rotações
-"""
-
 from typing import Any, List, Optional, Tuple
 
 VERMELHO = True
@@ -43,7 +5,6 @@ PRETO = False
 
 
 class No:
-    """Nó da árvore rubro-negra."""
 
     __slots__ = ("chave", "valor", "cor", "esq", "dir", "pai")
 
@@ -63,25 +24,17 @@ class No:
 
 
 class ArvoreRubroNegra:
-    """Árvore rubro-negra de chaves comparáveis, sem chaves repetidas."""
 
     def __init__(self) -> None:
-        # Sentinela: representa todas as folhas vazias (sempre preta).
         self.NIL = No(None, PRETO)
         self.NIL.esq = self.NIL.dir = self.NIL.pai = self.NIL
 
         self.raiz: No = self.NIL
         self.tamanho: int = 0
 
-        # Contador de rotações realizadas (usado nos experimentos).
         self.rotacoes: int = 0
 
-        # Contador acumulado de nós visitados em buscas e consultas.
         self.visitas: int = 0
-
-    # ------------------------------------------------------------------
-    # Rotações
-    # ------------------------------------------------------------------
 
     def _rotacao_esquerda(self, x: No) -> None:
         """
@@ -133,17 +86,7 @@ class ArvoreRubroNegra:
         x.pai = y
         self.rotacoes += 1
 
-    # ------------------------------------------------------------------
-    # Busca
-    # ------------------------------------------------------------------
-
     def buscar(self, chave: Any) -> Tuple[bool, int]:
-        """
-        Busca uma chave na árvore.
-
-        Retorna (encontrado, comparacoes), onde `comparacoes` é a
-        quantidade de nós visitados durante a descida.
-        """
         no = self.raiz
         comparacoes = 0
 
@@ -169,17 +112,8 @@ class ArvoreRubroNegra:
 
     def __len__(self) -> int:
         return self.tamanho
-
-    # ------------------------------------------------------------------
-    # Inserção
-    # ------------------------------------------------------------------
-
+    
     def inserir(self, chave: Any, valor: Any = None) -> bool:
-        """
-        Insere uma chave (com um valor opcional associado). Retorna
-        False (sem alterar a árvore) se a chave já existir, e True
-        caso contrário.
-        """
         pai = self.NIL
         atual = self.raiz
 
@@ -205,17 +139,6 @@ class ArvoreRubroNegra:
         return True
 
     def _corrigir_insercao(self, z: No) -> None:
-        """
-        Restaura as propriedades após inserir `z` (vermelho). A única
-        propriedade que pode estar violada é a 4 (vermelho com filho
-        vermelho). Três casos, olhando o "tio" de z:
-
-            Caso 1: tio vermelho  -> recolore pai, tio e avô; sobe.
-            Caso 2: tio preto, z é filho "interno" -> rotação para
-                    transformar no caso 3.
-            Caso 3: tio preto, z é filho "externo" -> recolore e faz
-                    uma rotação no avô. Termina.
-        """
         while z.pai.cor == VERMELHO:
             if z.pai is z.pai.pai.esq:
                 tio = z.pai.pai.dir
@@ -250,12 +173,7 @@ class ArvoreRubroNegra:
 
         self.raiz.cor = PRETO
 
-    # ------------------------------------------------------------------
-    # Remoção
-    # ------------------------------------------------------------------
-
     def _transplantar(self, u: No, v: No) -> None:
-        """Substitui a subárvore com raiz em `u` pela subárvore em `v`."""
         if u.pai is self.NIL:
             self.raiz = v
         elif u is u.pai.esq:
@@ -275,7 +193,6 @@ class ArvoreRubroNegra:
         return no
 
     def remover(self, chave: Any) -> bool:
-        """Remove uma chave. Retorna False se ela não existir."""
         z = self._buscar_no(chave)
         if z is self.NIL:
             return False
@@ -290,8 +207,6 @@ class ArvoreRubroNegra:
             x = z.esq
             self._transplantar(z, z.esq)
         else:
-            # Dois filhos: o sucessor (menor da subárvore direita)
-            # ocupa o lugar de z e herda sua cor.
             y = self._minimo_no(z.dir)
             cor_original_y = y.cor
             x = y.dir
@@ -310,8 +225,6 @@ class ArvoreRubroNegra:
 
         self.tamanho -= 1
 
-        # Se o nó efetivamente removido era preto, a altura negra de
-        # alguns caminhos diminuiu e é preciso corrigir.
         if cor_original_y == PRETO:
             self._corrigir_remocao(x)
 
@@ -379,9 +292,6 @@ class ArvoreRubroNegra:
 
         x.cor = PRETO
 
-    # ------------------------------------------------------------------
-    # Consultas de vizinhança e por faixa
-    # ------------------------------------------------------------------
 
     def obter(self, chave: Any, padrao: Any = None) -> Any:
         """Valor associado à chave (ou `padrao` se ela não existir)."""
@@ -470,9 +380,6 @@ class ArvoreRubroNegra:
         visitar(self.raiz)
         return resultado
 
-    # ------------------------------------------------------------------
-    # Consultas e percursos
-    # ------------------------------------------------------------------
 
     def minimo(self) -> Optional[Any]:
         if self.raiz is self.NIL:
@@ -518,9 +425,6 @@ class ArvoreRubroNegra:
             no = no.esq
         return altura
 
-    # ------------------------------------------------------------------
-    # Validação das propriedades
-    # ------------------------------------------------------------------
 
     def validar(self) -> List[str]:
         """
@@ -576,10 +480,6 @@ class ArvoreRubroNegra:
             erros.append("O tamanho registrado não bate com a quantidade de nós.")
 
         return erros
-
-    # ------------------------------------------------------------------
-    # Representação textual
-    # ------------------------------------------------------------------
 
     def desenhar(self) -> str:
         """

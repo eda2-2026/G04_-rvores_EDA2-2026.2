@@ -1,11 +1,3 @@
-"""
-Desenho da árvore rubro-negra em SVG.
-
-Usa a própria estrutura da árvore (nada é reimplementado aqui). Cada
-nó vira um círculo vermelho ou preto; `rotulo` define o texto dentro
-do nó e `dica` o texto que aparece ao passar o mouse.
-"""
-
 import html
 from typing import Any, Callable, Dict, List, Optional
 

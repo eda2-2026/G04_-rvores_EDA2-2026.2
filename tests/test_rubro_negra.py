@@ -1,13 +1,3 @@
-"""
-Testes automatizados da árvore rubro-negra.
-
-Executar (não precisa instalar nada):
-    python -m unittest discover -s tests -v
-
-Também funciona com pytest:
-    pytest tests/
-"""
-
 import math
 import os
 import random
@@ -208,7 +198,6 @@ class TestRemocao(unittest.TestCase):
 
 
 class TestContraUmOraculo(unittest.TestCase):
-    """Compara a árvore com o `set` do Python em operações aleatórias."""
 
     def test_operacoes_aleatorias_misturadas(self):
         rng = random.Random(2026)
@@ -238,7 +227,6 @@ class TestContraUmOraculo(unittest.TestCase):
 
 
 class TestValidador(unittest.TestCase):
-    """Garante que o validador realmente detecta árvores inválidas."""
 
     def test_detecta_raiz_vermelha(self):
         arv = ArvoreRubroNegra()
@@ -263,7 +251,6 @@ class TestValidador(unittest.TestCase):
 
 
 class TestValorEConsultasDeVizinhanca(unittest.TestCase):
-    """Valor associado à chave, piso/predecessor/sucessor e faixa."""
 
     def _arvore(self, chaves):
         arv = ArvoreRubroNegra()

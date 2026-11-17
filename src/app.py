@@ -1,14 +1,3 @@
-"""
-Backend Flask do sistema de reserva de salas.
-
-Uso:
-    python src/app.py
-
-Na primeira execução, cria data/reservas.json com salas e reservas de
-exemplo. Toda alteração (reservar, cancelar, criar sala) é gravada
-nesse arquivo.
-"""
-
 import os
 import sys
 import threading
@@ -26,11 +15,6 @@ from visualizar import svg_da_arvore
 RAIZ_PROJETO = os.path.join(os.path.dirname(__file__), "..")
 PASTA_FRONTEND = os.path.join(RAIZ_PROJETO, "frontend")
 CAMINHO_PADRAO = os.path.join(RAIZ_PROJETO, "data", "reservas.json")
-
-
-# ----------------------------------------------------------------------
-# Conversão dos dados que chegam pela API
-# ----------------------------------------------------------------------
 
 
 def _json_do_corpo() -> dict:
@@ -69,11 +53,6 @@ def _hhmm(momento: datetime) -> str:
     return momento.strftime("%H:%M")
 
 
-# ----------------------------------------------------------------------
-# Aplicação
-# ----------------------------------------------------------------------
-
-
 def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     """
     Cria a aplicação. `caminho_dados` é o JSON de persistência; se não
@@ -86,8 +65,6 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
         agenda = criar_agenda_de_exemplo() if com_exemplo else criar_agenda_basica()
         salvar_agenda(agenda, caminho)
 
-    # O servidor de desenvolvimento atende várias requisições ao mesmo
-    # tempo; esta trava garante que só uma altere a agenda por vez.
     trava = threading.RLock()
 
     app = Flask(__name__, static_folder=None)
@@ -97,7 +74,6 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     def tratar_erro_de_reserva(erro: ErroDeReserva):
         return jsonify(erro.para_resposta()), erro.status
 
-    # ------------------------- frontend (estático) -------------------------
 
     @app.get("/")
     def pagina_principal():
@@ -111,7 +87,6 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     def arquivos_js(nome):
         return send_from_directory(os.path.join(PASTA_FRONTEND, "js"), nome)
 
-    # ------------------------------ salas ------------------------------
 
     @app.get("/api/salas")
     def listar_salas():
@@ -130,7 +105,6 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
             salvar_agenda(agenda, caminho)
         return jsonify({"sala": vars(sala)}), 201
 
-    # ----------------------------- agenda ------------------------------
 
     @app.get("/api/agenda")
     def agenda_do_dia():
@@ -178,7 +152,6 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
             salas, custo = agenda.salas_livres(inicio, fim, capacidade, tipo)
         return jsonify({"salas": [vars(s) for s in salas], "custo": custo})
 
-    # ---------------------------- reservas -----------------------------
 
     @app.post("/api/reservas")
     def criar_reserva():
