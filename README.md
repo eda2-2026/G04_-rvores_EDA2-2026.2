@@ -268,15 +268,40 @@ G04_-rvores_EDA2-2026.2
         └── arvore_de_uma_sala.png
 ```
 
+
 ## Capturas de Tela
 
-As imagens desta seção apresentam a estrutura da Árvore Rubro-Negra utilizada pelo sistema.
+As imagens a seguir apresentam as principais funcionalidades do Sistema de Reserva de Salas e Laboratórios.
 
-### Visualização da Árvore Rubro-Negra
+### 1. Mapa de Reservas
 
-A imagem apresenta uma árvore com reservas organizadas conforme o horário de início, permitindo observar a distribuição dos nós e suas respectivas cores.
+Visualização da disponibilidade das salas e laboratórios, mostrando os horários livres e ocupados.
 
-![Visualização da Árvore Rubro-Negra](docs/imagens/arvore_de_uma_sala.png)
+![Mapa de Reservas](./docs/imagens/mapa_reservas.png)
+
+### 2. Conflito de Reserva
+
+Demonstração da identificação de conflitos quando uma nova reserva possui horário sobreposto a outra já cadastrada.
+
+![Conflito de Reserva](./docs/imagens/conflito_reserva.png)
+
+### 3. Busca de Salas Disponíveis
+
+Interface de busca de salas livres conforme o horário, a capacidade e o tipo de ambiente.
+
+![Busca de Salas](./docs/imagens/busca_sala.png)
+
+### 4. Visualização da Árvore Rubro-Negra
+
+Representação gráfica da Árvore Rubro-Negra utilizada para organizar as reservas, mostrando a estrutura e as cores dos nós.
+
+![Árvore Rubro-Negra](./docs/imagens/arvore_de_uma_sala.png)
+
+### 5. Funcionamento Interno da Árvore
+
+Visualização detalhada da estrutura da árvore, permitindo acompanhar a organização dos nós e o balanceamento.
+
+![Por Dentro da Árvore](./docs/imagens/por_dentro_da_arvore.png)
 
 ## Análise de Desempenho
 
