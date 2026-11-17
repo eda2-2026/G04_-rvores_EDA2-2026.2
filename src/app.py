@@ -17,6 +17,11 @@ PASTA_FRONTEND = os.path.join(RAIZ_PROJETO, "frontend")
 CAMINHO_PADRAO = os.path.join(RAIZ_PROJETO, "data", "reservas.json")
 
 
+                                                                        
+                                         
+                                                                        
+
+
 def _json_do_corpo() -> dict:
     dados = request.get_json(silent=True)
     if not isinstance(dados, dict):
@@ -53,6 +58,11 @@ def _hhmm(momento: datetime) -> str:
     return momento.strftime("%H:%M")
 
 
+                                                                        
+           
+                                                                        
+
+
 def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     """
     Cria a aplicação. `caminho_dados` é o JSON de persistência; se não
@@ -65,6 +75,8 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
         agenda = criar_agenda_de_exemplo() if com_exemplo else criar_agenda_basica()
         salvar_agenda(agenda, caminho)
 
+                                                                      
+                                                                   
     trava = threading.RLock()
 
     app = Flask(__name__, static_folder=None)
@@ -74,6 +86,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     def tratar_erro_de_reserva(erro: ErroDeReserva):
         return jsonify(erro.para_resposta()), erro.status
 
+                                                                             
 
     @app.get("/")
     def pagina_principal():
@@ -87,6 +100,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     def arquivos_js(nome):
         return send_from_directory(os.path.join(PASTA_FRONTEND, "js"), nome)
 
+                                                                         
 
     @app.get("/api/salas")
     def listar_salas():
@@ -105,6 +119,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
             salvar_agenda(agenda, caminho)
         return jsonify({"sala": vars(sala)}), 201
 
+                                                                         
 
     @app.get("/api/agenda")
     def agenda_do_dia():
@@ -152,6 +167,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
             salas, custo = agenda.salas_livres(inicio, fim, capacidade, tipo)
         return jsonify({"salas": [vars(s) for s in salas], "custo": custo})
 
+                                                                         
 
     @app.post("/api/reservas")
     def criar_reserva():
@@ -174,7 +190,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
             salvar_agenda(agenda, caminho)
         return jsonify({"reserva": reserva.para_dict()})
 
-    # ------------------------ por dentro da árvore ------------------------
+                                                                            
 
     @app.get("/api/estatisticas")
     def estatisticas():
@@ -184,7 +200,7 @@ def criar_app(caminho_dados: str = None, com_exemplo: bool = True) -> Flask:
     @app.get("/api/arvore/<int:sala_id>")
     def desenho_da_arvore(sala_id: int):
         with trava:
-            arvore = agenda._arvore(sala_id)  # levanta SalaNaoEncontrada se não existir
+            arvore = agenda._arvore(sala_id)                                            
             svg = svg_da_arvore(
                 arvore,
                 rotulo=lambda chave: _hhmm(chave),
