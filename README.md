@@ -15,6 +15,16 @@
 | 23/1026699 | Eduarda Domingos Rodrigues |
 | 23/1012316 | Yasmin Moreira do Nascimento |
 
+## Vídeo de Apresentação
+
+O vídeo apresenta o Sistema de Reserva de Salas e Laboratórios,
+suas principais funcionalidades e a aplicação da Árvore Rubro-Negra
+no gerenciamento de reservas e na identificação de conflitos de horários.
+
+Clique na imagem abaixo para assistir à apresentação:
+
+[![Vídeo de Apresentação](https://img.youtube.com/vi/nmgDfAjzGZk/hqdefault.jpg)](https://youtu.be/nmgDfAjzGZk)
+
 ## Descrição do Projeto
 
 Este projeto foi desenvolvido para a disciplina de **Estruturas de Dados 2**, com o objetivo de aplicar e analisar o funcionamento de árvores balanceadas na resolução de problemas computacionais.
